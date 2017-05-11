@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TopCodes Example</title>
+  <link rel="stylesheet" href="custom.css">
+</head>
+
+<body>
+  <canvas id="video-canvas" width="800" height="600" style="background: #ddd;"></canvas>
+  <br/>
+  <button id="camera-button" onclick="TopCodes.startStopVideoScan('video-canvas')">Start / Stop</button>
+  <img id="firstImage" src="firstImage.jpeg" alt="Smiley face" >
+  <img id="secondImage" src="SecondImage.jpeg" alt="Smiley face" >
+  <img id="thirdImage" src="ThirdImage.jpeg" alt="Smiley face" >
+  <img id="fourthImage" src="fourthImage.png" alt="Smiley face" >
+
+  <script src="topcodes.js"></script>
+
+  <script>
+
+  TopCodes.setVideoFrameCallback("video-canvas", function(jsonString) {
+    var json = JSON.parse(jsonString);
+    drawCodes(json.topcodes);
+  });
+
+
+
+  var Images = [
+                document.getElementById('firstImage'), 
+                document.getElementById('secondImage'),
+                document.getElementById('thirdImage'),
+                document.getElementById('fourthImage')
+                  ];
+
+
+
+  var initPosx = [ 0, 200, 400, 600];
+  var finalPosx = [0, 200, 400, 600];
+
+  for (i=0; i < 4; i++){
+    Images[i].style.position = "absolute";
+  }
+
+
+
+  function drawCodes(topcodes) {
+    var ctx = document.querySelector("#video-canvas").getContext('2d');
+    ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
+    for (i=0; i<topcodes.length; i++) {
+      ctx.beginPath();
+      ctx.arc(topcodes[i].x, topcodes[i].y, topcodes[i].radius, 0, Math.PI*2, true);
+      ctx.fill();
+      //console.log(topcodes[i].code);
+      
+      var d = document.getElementById('camera-button');
+      d.style.position = "absolute";      
+      
+      if (topcodes[i].code == 61){
+        d.style.left = topcodes[i].x+'px';
+        d.style.top = topcodes[i].y+'px';
+
+      }
+      getTopCodePositions(topcodes[i]);
+
+
+      /*switch (topcodes[i].code){
+        case 233:
+          initPosx[0] = topcodes[i].x;
+          break;
+        case 179:
+          initPosx[1] = topcodes[i].x;
+          break;
+        case 167:
+          initPosx[2] = topcodes[i].x;
+          break;
+        case 271:
+          initPosx[3] = topcodes[i].x;
+          break;
+      }*/
+
+
+      //order the physical positions of the top codes 
+      var indexRealPos = order();
+      for(l = 0; l < 4; l++){
+        switch (indexRealPos[l]){
+          case 0:
+            //place in first position
+            relocateImage(l, 0);
+
+            break;
+          case 1:
+            //place in second position
+            relocateImage(l, 1);
+            break;
+          case 2:
+            //place in third position
+            relocateImage(l, 2);
+            break;
+          case 3:
+            //place in forth position
+            relocateImage(l, 3);
+            break;
+        }
+      }
+
+    }
+  }
+
+  //get relevant topcode current positions
+  function getTopCodePositions(topCode){
+      switch (topCode.code){
+        case 233:
+          initPosx[0] = topCode.x;
+          break;
+        case 179:
+          initPosx[1] = topCode.x;
+          break;
+        case 167:
+          initPosx[2] = topCode.x;
+          break;
+        case 271:
+          initPosx[3] = topCode.x;
+          break;
+      }
+  }
+
+
+  //return topcode order (arrangement)
+  function order(){
+    var orderedRealPos = initPosx.slice();
+    orderedRealPos.sort();
+    var indexRealPos = [0,0,0,0];
+    for(k = 0; k < 4; k++){
+      for (j = 0; j < 4; j++){
+        if (initPosx[j] == orderedRealPos[k]){
+          indexRealPos[j] = k;
+        }
+      }
+    }
+
+    console.log(indexRealPos);
+    return indexRealPos;
+  }
+
+//relocate the image     
+  function relocateImage(m, n){
+    Images[m].style.left = finalPosx[n] + 'px';
+  }
+
+
+  </script>
+</body>
+</html>
