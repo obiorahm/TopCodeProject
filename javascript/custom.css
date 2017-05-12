@@ -1,8 +1,12 @@
 #video-canvas{
-	display: none;
+	/*display: none;*/
 }
 .divImages {
     height: 200px;
     width: 16%;
     background-color: powderblue;
 }
+
+#InfoImage{
+    position: absolute;
+    left: 1000px;

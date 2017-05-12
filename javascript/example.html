@@ -6,18 +6,24 @@
 </head>
 
 <body>
-  <canvas id="video-canvas" width="800" height="600" style="background: #ddd;"></canvas>
+  <canvas id="video-canvas" width="1000" height="600" style="background: #ddd;"></canvas>
   <br/>
   <button id="camera-button" onclick="TopCodes.startStopVideoScan('video-canvas')">Start / Stop</button>
 
-  <img id="firstImage" src="firstImage.jpeg" alt="Smiley face" >
+  <img id="firstimage" src="firstimage.jpeg" alt="Smiley face" >
 
-  <img id="secondImage" src="SecondImage.jpeg" alt="Smiley face" >    
+  <img id="secondimage" src="secondimage.jpeg" alt="Smiley face" >    
 
-  <img id="thirdImage" src="ThirdImage.jpeg" alt="Smiley face" >    
+  <img id="thirdimage" src="thirdimage.jpeg" alt="Smiley face" >    
 
-  <img id="fourthImage" src="fourthImage.png" alt="Smiley face" >
+  <img id="fourthimage" src="fourthimage.jpeg" alt="Smiley face" >
   
+  <img id="fifthimage" src="fifthimage.jpeg" alt="Smiley face" >
+
+  <img id="InfoImage" src="firstimage.jpeg">
+
+
+
 
   
   <script src="topcodes.js"></script>
@@ -32,30 +38,28 @@
 
 
   var Images = [
-                document.getElementById('firstImage'), 
-                document.getElementById('secondImage'),
-                document.getElementById('thirdImage'),
-                document.getElementById('fourthImage')
+                document.getElementById('firstimage'), 
+                document.getElementById('secondimage'),
+                document.getElementById('thirdimage'),
+                document.getElementById('fourthimage'),
+                document.getElementById('fifthimage')
                   ];
 
 
 
-  var initPosx = [ 600, 600, 600, 600];
-  var finalPosx = [0, 200, 400, 600];
+
+  var initPosx = [ 0, 0, 0, 0, 0];
+  var finalPosx = [800, 600, 400, 200, 0];
 
 //set absolute positioning for images 
-  for (i=0; i < 4; i++){
+  for (i=0; i < 5; i++){
     Images[i].style.position = "absolute";
     Images[i].style.visibility = "hidden";
-  }
 
-  //make images invisible at first
-
-  function clearImage(){
 
   }
 
-
+ 
 
   function drawCodes(topcodes) {
     var ctx = document.querySelector("#video-canvas").getContext('2d');
@@ -69,11 +73,6 @@
       var d = document.getElementById('camera-button');
       d.style.position = "absolute";      
       
-      if (topcodes[i].code == 61){
-        d.style.left = topcodes[i].x+'px';
-        d.style.top = topcodes[i].y+'px';
-
-      }
 
       //get topcode position for relevant topcodes
       getTopCodePositions(topcodes[i]);
@@ -84,6 +83,8 @@
       //relocate images based on position of topcodes
       repositionImage(indexRealPos);
 
+      displayInformationImage();
+
     }
   }
 
@@ -91,22 +92,26 @@
   function getTopCodePositions(topCode){
       switch (topCode.code){
         case 55:
-          initPosx[0] = topCode.x;
+          initPosx[0] = topCode.y;
+          console.log("The position of Topcode 55 in y-axis " + topCode.y);
           Images[0].style.visibility = 'visible';          
           break;
-        case 31:
-          initPosx[1] = topCode.x;
+        case 61:
+          initPosx[1] = topCode.y;
           Images[1].style.visibility = 'visible';          
           break;
-        case 167:
-          initPosx[2] = topCode.x;
+        case 47:
+          initPosx[2] = topCode.y;
           Images[2].style.visibility = 'visible';          
           break;
-        case 271:
-          initPosx[3] = topCode.x;
+        case 59:
+          initPosx[3] = topCode.y;
           Images[3].style.visibility = 'visible';          
           break;
-      }
+        case 31:
+          initPosx[4] = topCode.y;
+          Images[4].style.visibility = 'visible';          
+          break;      }
   }
 
 
@@ -114,10 +119,10 @@
   function order(){
     var orderedRealPos = initPosx.slice();
     orderedRealPos.sort();
-    var indexRealPos = [0,0,0,0];
-    for(k = 0; k < 4; k++){
-      for (j = 0; j < 4; j++){
-        if (initPosx[j] == orderedRealPos[k]){
+    var indexRealPos = [200, 200, 200, 200, 200];
+    for(k = 0; k < 5; k++){
+      for (j = 0; j < 5; j++){
+        if (initPosx[j] != 0 && initPosx[j] == orderedRealPos[k]){
           indexRealPos[j] = k;
         }
       }
@@ -126,32 +131,48 @@
     console.log(indexRealPos);
     return indexRealPos;
   }
-
+var InfoImagePos = 4
   //reposition image based on position of topcodes
   function repositionImage(indexRealPos){
-      for(l = 0; l < 4; l++){
-        switch (indexRealPos[l]){
+      InfoImagePos = Math.min.apply(null, indexRealPos);
+      InfoImageIndex = 0;
+      for(l = 0; l < 5; l++){
+
+        /*if (indexRealPos[l] == InfoImagePos)
+            InfoImageIndex = l;*/
+
+          switch (indexRealPos[l]){
           case 0:
             //place in first position
             Images[l].style.left = finalPosx[0] + 'px';
-
             break;
           case 1:
             //place in second position
             Images[l].style.left = finalPosx[1] + 'px';
-
             break;
           case 2:
             //place in third position
             Images[l].style.left = finalPosx[2] + 'px';
-        break;
+            break;
           case 3:
             //place in forth position
             Images[l].style.left = finalPosx[3] + 'px';
             break;
-        }
-      }    
+          case 4:
+            //place in forth position
+            Images[l].style.left = finalPosx[4] + 'px';
+            break;
+
+    }
+
+      }  
+        console.log(InfoImageIndex);
+              document.getElementById('InfoImage').src = Images[InfoImageIndex].src;
+
+  
   }
+
+
 
 
 
