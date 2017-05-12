@@ -20,7 +20,14 @@
   
   <img id="fifthimage" src="fifthimage.jpeg" alt="Smiley face" >
 
-  <img id="InfoImage" src="firstimage.jpeg">
+  
+
+  <img class="InfoImage" id="InfoImage1" src="firstimage.jpeg">
+  <img class="InfoImage" id="InfoImage2" src="secondimage.jpeg">
+  <img class="InfoImage" id="InfoImage3" src="thirdimage.jpeg">
+  <img class="InfoImage" id="InfoImage4" src="fourthimage.jpeg">
+  <img class="InfoImage" id="InfoImage5" src="fifthimage.jpeg">
+
 
 
 
@@ -45,11 +52,23 @@
                 document.getElementById('fifthimage')
                   ];
 
+  var InfoImages = [
+                document.getElementById('InfoImage1'), 
+                document.getElementById('InfoImage2'),
+                document.getElementById('InfoImage3'),
+                document.getElementById('InfoImage4'),
+                document.getElementById('InfoImage5')
+                  ];                  
+
 
 
 
   var initPosx = [ 0, 0, 0, 0, 0];
   var finalPosx = [800, 600, 400, 200, 0];
+
+  var InfoImagePos = 4;
+  var InfoImageIndex = 0;
+
 
 //set absolute positioning for images 
   for (i=0; i < 5; i++){
@@ -131,15 +150,14 @@
     console.log(indexRealPos);
     return indexRealPos;
   }
-var InfoImagePos = 4
   //reposition image based on position of topcodes
   function repositionImage(indexRealPos){
       InfoImagePos = Math.min.apply(null, indexRealPos);
       InfoImageIndex = 0;
       for(l = 0; l < 5; l++){
 
-        /*if (indexRealPos[l] == InfoImagePos)
-            InfoImageIndex = l;*/
+        if (indexRealPos[l] == InfoImagePos)
+            InfoImageIndex = l;
 
           switch (indexRealPos[l]){
           case 0:
@@ -163,13 +181,22 @@ var InfoImagePos = 4
             Images[l].style.left = finalPosx[4] + 'px';
             break;
 
-    }
+        }
 
       }  
-        console.log(InfoImageIndex);
-              document.getElementById('InfoImage').src = Images[InfoImageIndex].src;
+  }
 
-  
+
+  function displayInformationImage() {
+    // body...
+        for (p = 0; p < 5; p++){
+          if(p == InfoImageIndex){
+              InfoImages[p].style.visibility = 'visible';
+          }else{
+              InfoImages[p].style.visibility = 'hidden';
+
+          }
+        }
   }
 
 
