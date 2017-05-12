@@ -9,11 +9,17 @@
   <canvas id="video-canvas" width="800" height="600" style="background: #ddd;"></canvas>
   <br/>
   <button id="camera-button" onclick="TopCodes.startStopVideoScan('video-canvas')">Start / Stop</button>
-  <img id="firstImage" src="firstImage.jpeg" alt="Smiley face" >
-  <img id="secondImage" src="SecondImage.jpeg" alt="Smiley face" >
-  <img id="thirdImage" src="ThirdImage.jpeg" alt="Smiley face" >
-  <img id="fourthImage" src="fourthImage.png" alt="Smiley face" >
 
+  <img id="firstImage" src="firstImage.jpeg" alt="Smiley face" >
+
+  <img id="secondImage" src="SecondImage.jpeg" alt="Smiley face" >    
+
+  <img id="thirdImage" src="ThirdImage.jpeg" alt="Smiley face" >    
+
+  <img id="fourthImage" src="fourthImage.png" alt="Smiley face" >
+  
+
+  
   <script src="topcodes.js"></script>
 
   <script>
@@ -34,12 +40,19 @@
 
 
 
-  var initPosx = [ 0, 200, 400, 600];
+  var initPosx = [ 600, 600, 600, 600];
   var finalPosx = [0, 200, 400, 600];
 
 //set absolute positioning for images 
   for (i=0; i < 4; i++){
     Images[i].style.position = "absolute";
+    Images[i].style.visibility = "hidden";
+  }
+
+  //make images invisible at first
+
+  function clearImage(){
+
   }
 
 
@@ -77,17 +90,21 @@
   //get relevant topcode current positions
   function getTopCodePositions(topCode){
       switch (topCode.code){
-        case 233:
+        case 55:
           initPosx[0] = topCode.x;
+          Images[0].style.visibility = 'visible';          
           break;
-        case 179:
+        case 31:
           initPosx[1] = topCode.x;
+          Images[1].style.visibility = 'visible';          
           break;
         case 167:
           initPosx[2] = topCode.x;
+          Images[2].style.visibility = 'visible';          
           break;
         case 271:
           initPosx[3] = topCode.x;
+          Images[3].style.visibility = 'visible';          
           break;
       }
   }
@@ -117,15 +134,17 @@
           case 0:
             //place in first position
             Images[l].style.left = finalPosx[0] + 'px';
+
             break;
           case 1:
             //place in second position
             Images[l].style.left = finalPosx[1] + 'px';
+
             break;
           case 2:
             //place in third position
             Images[l].style.left = finalPosx[2] + 'px';
-            break;
+        break;
           case 3:
             //place in forth position
             Images[l].style.left = finalPosx[3] + 'px';
